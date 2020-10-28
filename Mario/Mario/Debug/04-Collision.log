@@ -1,0 +1,6 @@
+﻿  main.cpp
+F:\Tài liệu học tập\5\Phát triển game\gamedev-intro-tutorials-master\04-Collision\main.cpp(539,27): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+F:\Tài liệu học tập\5\Phát triển game\gamedev-intro-tutorials-master\04-Collision\main.cpp(556,20): warning C4018: '<': signed/unsigned mismatch
+F:\Tài liệu học tập\5\Phát triển game\gamedev-intro-tutorials-master\04-Collision\main.cpp(561,20): warning C4018: '<': signed/unsigned mismatch
+F:\Tài liệu học tập\5\Phát triển game\gamedev-intro-tutorials-master\04-Collision\main.cpp(593,21): warning C4018: '<': signed/unsigned mismatch
+  04-Collision.vcxproj -> F:\Tài liệu học tập\5\Phát triển game\gamedev-intro-tutorials-master\Debug\04-Collision.exe
