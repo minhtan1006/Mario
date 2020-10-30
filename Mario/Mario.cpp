@@ -1,4 +1,4 @@
-﻿#include <algorithm>
+#include <algorithm>
 #include "debug.h"
 
 #include "Mario.h"
@@ -12,7 +12,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	CGameObject::Update(dt);
 
 	// Simple fall down
-		vy += MARIO_GRAVITY * dt;
+		vy += MARIO_GRAVITY*dt;
 
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
@@ -20,7 +20,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	coEvents.clear();
 
 	// turn off collision when die 
-	if (state != MARIO_STATE_DIE)
+	if (state!=MARIO_STATE_DIE)
 		CalcPotentialCollisions(coObjects, coEvents);
 
 	// reset untouchable timer if untouchable time has passed
@@ -46,8 +46,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		x += min_tx*dx + nx*0.4f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
 		y += min_ty*dy + ny*0.4f;
 		
-		if (nx != 0) vx = 0;
-		if (ny != 0) vy = 0;
+		if (nx!=0) vx = 0;
+		if (ny!=0) vy = 0;
 
 		// Collision logic with Goombas
 		for (UINT i = 0; i < coEventsResult.size(); i++)
@@ -110,18 +110,11 @@ void CMario::Render()
 					ani = MARIO_ANI_BIG_WALKING_RIGHT;
 				else ani = MARIO_ANI_BIG_WALKING_LEFT;
 			}
-			else if (state == MARIO_STATE_JUMP)
+			else if (vy != 0)
 			{
 				if (nx > 0) ani = MARIO_ANI_BIG_JUMP_RIGHT;
 				else ani = MARIO_ANI_BIG_JUMP_LEFT;
 			}
-			/*
-			else if (state == MARIO_STATE_SIT)
-			{
-				if (nx > 0) ani = MARIO_ANI_BIG_SIT_RIGHT;
-				else ani = MARIO_ANI_BIG_SIT_LEFT;
-			}
-			*/
 		}
 		else if (level == MARIO_LEVEL_SMALL)
 		{
@@ -160,18 +153,29 @@ void CMario::Render()
 				if (nx > 0) ani = MARIO_ANI_TAIL_JUMP_RIGHT;
 				else ani = MARIO_ANI_TAIL_JUMP_LEFT;
 			}
-			/*
-			else if (state == MARIO_STATE_SIT)
-			{
-				if (nx > 0) ani = MARIO_ANI_TAIL_SIT_RIGHT;
-				else ani = MARIO_ANI_TAIL_SIT_LEFT;
-			}
-			*/
 		}
-
+		else if (level == MARIO_LEVEL_FIRE)
+		{
+			if (state != MARIO_STATE_JUMP)
+			{
+				if (vx == 0)
+				{
+					if (nx > 0) ani = MARIO_ANI_FIRE_IDLE_RIGHT;
+					else ani = MARIO_ANI_FIRE_IDLE_LEFT;
+				}
+				else if (vx > 0)
+					ani = MARIO_ANI_FIRE_WALKING_RIGHT;
+				else ani = MARIO_ANI_FIRE_WALKING_LEFT;
+			}
+			else if (state == MARIO_STATE_JUMP)
+			{
+				if (nx > 0) ani = MARIO_ANI_FIRE_JUMP_RIGHT;
+				else ani = MARIO_ANI_FIRE_JUMP_LEFT;
+			}
+		}
 	int alpha = 255;
 	if (untouchable) alpha = 128;
-	animations[ani]->Render(x, y, alpha);
+      	animations[ani]->Render(x, y, alpha);
 
 	RenderBoundingBox();
 }
@@ -186,42 +190,30 @@ void CMario::SetState(int state)
 		vx = MARIO_WALKING_SPEED;
 		nx = 1;
 		break;
-	
 	case MARIO_STATE_WALKING_LEFT: 
 		vx = -MARIO_WALKING_SPEED;
 		nx = -1;
 		break;
-	
 	case MARIO_STATE_JUMP: 
 		vy = -MARIO_JUMP_SPEED_Y;
-	
-	case MARIO_STATE_IDLE_RIGHT: 
+	case MARIO_STATE_IDLE: 
 		vx = 0;
-		nx = 1;
 		break;
-
-	case MARIO_STATE_IDLE_LEFT:
-		vx = 0;
-		nx = -1;
-		break;
-	
 	case MARIO_STATE_DIE:
 		vy = -MARIO_DIE_DEFLECT_SPEED;
 		break;
 	}
 }
 
-void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom)
+void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
 	left = x;
-	top = y; 
+	top = y;
 
-	if (level == MARIO_LEVEL_BIG)
+	if (level == MARIO_LEVEL_BIG || level == MARIO_LEVEL_FIRE)
 	{
-		{
-			right = x + MARIO_BIG_BBOX_WIDTH;
-			bottom = y + MARIO_BIG_BBOX_HEIGHT;
-		}
+		right = x + MARIO_BIG_BBOX_WIDTH;
+		bottom = y + MARIO_BIG_BBOX_HEIGHT;
 	}
 	else if (level == MARIO_LEVEL_SMALL)
 	{
@@ -230,7 +222,7 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 	}
 	else if (level == MARIO_LEVEL_TAIL)
 	{
-		if (nx == 1) 
+		if (nx == 1)
 		{
 			left = x + 6.00f;
 			top = y;
