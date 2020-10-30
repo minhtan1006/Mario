@@ -1,4 +1,4 @@
-﻿/* =============================================================
+/* =============================================================
 	INTRODUCTION TO GAME PROGRAMMING SE102
 	
 	SAMPLE 04 - COLLISION
@@ -68,8 +68,8 @@ void CSampleKeyHander::OnKeyDown(int KeyCode)
 	case DIK_X:
 		mario->SetState(MARIO_STATE_JUMP);
 		break;
-	case DIK_A:		// reset
-		mario->SetState(MARIO_STATE_IDLE_RIGHT);
+	case DIK_A: // reset
+		mario->SetState(MARIO_STATE_IDLE);
 		mario->SetLevel(MARIO_LEVEL_BIG);
 		mario->SetPosition(50.0f,0.0f);
 		mario->SetSpeed(0, 0);
@@ -77,7 +77,7 @@ void CSampleKeyHander::OnKeyDown(int KeyCode)
 	case DIK_L:		// đổi dạng
 		int Level = mario->GetLevel();
 		int State = mario->GetState();
-		if (Level == MARIO_LEVEL_TAIL) 
+		if (Level == MARIO_LEVEL_FIRE)
 		{
 			float px, py;
 			mario->GetPosition(px, py);
@@ -91,14 +91,21 @@ void CSampleKeyHander::OnKeyDown(int KeyCode)
 			mario->SetLevel(MARIO_LEVEL_BIG);
 			mario->SetPosition(px - 1.0f, py - 12.00f);
 		}
-		else
+		else if (Level == MARIO_LEVEL_BIG)
 		{
 			float px, py;
 			mario->GetPosition(px, py);
 			mario->SetLevel(MARIO_LEVEL_TAIL);
 			mario->SetPosition(px, py - 1.0f);
-			break;
 		}
+		else if (Level == MARIO_LEVEL_TAIL)
+		{
+			float px, py;
+			mario->GetPosition(px, py);
+			mario->SetLevel(MARIO_LEVEL_FIRE);
+			mario->SetPosition(px, py);
+		}
+		break;
 	}
 	
 }
@@ -106,32 +113,20 @@ void CSampleKeyHander::OnKeyDown(int KeyCode)
 void CSampleKeyHander::OnKeyUp(int KeyCode)
 {
 	DebugOut(L"[INFO] KeyUp: %d\n", KeyCode);
-	switch (KeyCode)
-	{
-	case DIK_RIGHT:
-		mario->SetState(MARIO_STATE_IDLE_RIGHT);
-		break;
-	
-	case DIK_LEFT:
-		mario->SetState(MARIO_STATE_IDLE_LEFT);
-		break;
-	}
 }
 
 void CSampleKeyHander::KeyState(BYTE *states)
 {
 	// disable control key when Mario die 
 	if (mario->GetState() == MARIO_STATE_DIE) return;
-
 	if (game->IsKeyDown(DIK_RIGHT))
 		mario->SetState(MARIO_STATE_WALKING_RIGHT);
-
 	else if (game->IsKeyDown(DIK_LEFT))
 		mario->SetState(MARIO_STATE_WALKING_LEFT);
-
-	//else if (game->IsKeyDown(DIK_DOWN))
-	//	mario->SetState(MARIO_STATE_SIT);
+	else
+		mario->SetState(MARIO_STATE_IDLE);
 }
+
 LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message) {
@@ -170,12 +165,12 @@ void LoadResources()
 
 	// Mario big
 	sprites->Add(10000, 215, 243, 230, 270, texMario);			// idle right
-	
+
 	sprites->Add(10010, 176, 243, 191, 270, texMario);			// idle left
 
 	sprites->Add(10001, 255, 243, 271, 270, texMario);			// walk right
 	sprites->Add(10002, 295, 243, 311, 270, texMario);
-	
+
 	sprites->Add(10011, 135, 243, 151, 270, texMario);			// walk left
 	sprites->Add(10012, 95, 243, 111, 270, texMario);
 
@@ -183,7 +178,7 @@ void LoadResources()
 
 	sprites->Add(10021, 55, 243, 71, 270, texMario);			// jump left
 
-	//sprites->Add(10090, 376, 247, 390, 266, texMario);			// sit right
+	//sprites->Add(10090, 376, 247, 390, 266, texMario);		// sit right
 
 	//sprites->Add(10091, 16, 247, 30, 266, texMario);			// sit left
 
@@ -206,7 +201,7 @@ void LoadResources()
 
 
 	// Mario tail
-	
+
 	sprites->Add(10200, 211, 443, 233, 472, texMario);			// idle right
 
 	sprites->Add(10210, 173, 443, 195, 472, texMario);			// idle left
@@ -243,27 +238,27 @@ void LoadResources()
 
 
 	// Mario fire
-	/*
-	sprites->Add(10300, 216, 682, 230, 710, texMario);			// idle right
 
-	sprites->Add(10310, 176, 682, 191, 710, texMario);			// idle left
+	sprites->Add(10300, 216, 683, 230, 710, texMario);			// idle right
 
-	sprites->Add(10301, 255, 682, 271, 710, texMario);			// walk right
-	sprites->Add(10302, 295, 682, 311, 710, texMario);
+	sprites->Add(10310, 176, 683, 191, 710, texMario);			// idle left
 
-	sprites->Add(10311, 135, 682, 151, 710, texMario);			// walk left
-	sprites->Add(10312, 95, 682, 111, 710, texMario);
+	sprites->Add(10301, 255, 683, 271, 710, texMario);			// walk right
+	sprites->Add(10302, 295, 683, 311, 710, texMario);
 
-	sprites->Add(10320, 335, 682, 351, 710, texMario);			// jump right
+	sprites->Add(10311, 135, 683, 151, 710, texMario);			// walk left
+	sprites->Add(10312, 95, 683, 111, 710, texMario);
 
-	sprites->Add(10321, 55, 682, 71, 710, texMario);			// jump left
+	sprites->Add(10320, 335, 683, 351, 710, texMario);			// jump right
+
+	sprites->Add(10321, 55, 683, 71, 710, texMario);			// jump left
 
 	sprites->Add(10330, 365, 802, 380, 830, texMario);			// fire right
 	sprites->Add(10331, 385, 802, 400, 830, texMario);
 
 	sprites->Add(10330, 26, 802, 41, 830, texMario);			// fire left
 	sprites->Add(10331, 6, 802, 21, 830, texMario);
-	*/
+
 
 	LPDIRECT3DTEXTURE9 texMisc = textures->Get(ID_TEX_MISC);
 	sprites->Add(20001, 408, 225, 424, 241, texMisc);
@@ -272,16 +267,14 @@ void LoadResources()
 	sprites->Add(30001, 5, 14, 21, 29, texEnemy);
 	sprites->Add(30002, 25, 14, 41, 29, texEnemy);
 
-	sprites->Add(30003, 45, 21, 61, 29, texEnemy);	// die sprite
-
+	sprites->Add(30003, 45, 21, 61, 29, texEnemy); // die sprite
 
 	LPANIMATION ani;
 	
-	// Tạo animation
 	// Mario big
 	ani = new CAnimation(70);	// big idle right
 	ani->Add(10000);
-	animations->Add(1000, ani); 
+	animations->Add(1000, ani);
 
 	ani = new CAnimation(70);	// big idle left
 	ani->Add(10010);
@@ -340,9 +333,8 @@ void LoadResources()
 	ani->Add(10199);
 	animations->Add(1199, ani);
 
-
 	// Mario tail
-	
+
 	ani = new CAnimation(70);	// tail idle right
 	ani->Add(10200);
 	animations->Add(1200, ani);
@@ -390,7 +382,7 @@ void LoadResources()
 	ani->Add(10220);
 	ani->Add(10223);
 	animations->Add(1222, ani);
-	
+
 	ani = new CAnimation(70);	// tail fly left
 	ani->Add(10224);
 	ani->Add(10221);
@@ -400,10 +392,10 @@ void LoadResources()
 
 
 	// Mario fire
-	/*
+
 	ani = new CAnimation(70);	// fire idle right
 	ani->Add(10300);
-	animations->Add(1300, ani); 
+	animations->Add(1300, ani);
 
 	ani = new CAnimation(70);	// fire idle left
 	ani->Add(10310);
@@ -429,6 +421,7 @@ void LoadResources()
 	ani->Add(10321);
 	animations->Add(1321, ani);
 
+	/*
 	ani = new CAnimation(70);	// fire shoot right
 	ani->Add(10330);
 	ani->Add(10331)
@@ -453,9 +446,6 @@ void LoadResources()
 	ani->Add(30003);
 	animations->Add(702, ani);
 
-
-
-	// Add animation vào Mario
 	mario = new CMario();
 	// Mario big
 	mario->AddAnimation(1000);		// idle right
@@ -478,7 +468,7 @@ void LoadResources()
 
 
 	// Mario tail
-	
+
 	mario->AddAnimation(1200);		// idle right
 	mario->AddAnimation(1210);		// idle left
 	mario->AddAnimation(1201);		// walk right
@@ -494,7 +484,6 @@ void LoadResources()
 
 
 	// Mario fire
-	/*
 	mario->AddAnimation(1300);		// idle right
 	mario->AddAnimation(1310);		// idle left
 	mario->AddAnimation(1301);		// walk right
@@ -503,7 +492,7 @@ void LoadResources()
 	mario->AddAnimation(1321);		// jump left
 	mario->AddAnimation(1230);		// shoot right
 	mario->AddAnimation(1231);		// shoot left
-	*/
+	
 	mario->SetPosition(50.0f, 0);
 	objects.push_back(mario);
 
