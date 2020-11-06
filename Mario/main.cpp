@@ -29,12 +29,13 @@
 
 #include "Mario.h"
 #include "Brick.h"
+#include "Floor.h"
 #include "Goomba.h"
 
 #define WINDOW_CLASS_NAME L"SampleWindow"
 #define MAIN_WINDOW_TITLE L"04 - Collision"
 
-#define BACKGROUND_COLOR D3DCOLOR_XRGB(255, 255, 200)
+#define BACKGROUND_COLOR D3DCOLOR_XRGB(156, 252, 240)
 #define SCREEN_WIDTH 320
 #define SCREEN_HEIGHT 240
 
@@ -71,7 +72,7 @@ void CSampleKeyHander::OnKeyDown(int KeyCode)
 	case DIK_A: // reset
 		mario->SetState(MARIO_STATE_IDLE);
 		mario->SetLevel(MARIO_LEVEL_BIG);
-		mario->SetPosition(50.0f,0.0f);
+		mario->SetPosition(2300.0f,100.0f);
 		mario->SetSpeed(0, 0);
 		break;
 	case DIK_L:		// đổi dạng
@@ -119,10 +120,22 @@ void CSampleKeyHander::KeyState(BYTE *states)
 {
 	// disable control key when Mario die 
 	if (mario->GetState() == MARIO_STATE_DIE) return;
-	if (game->IsKeyDown(DIK_RIGHT))
+	
+	if (game->IsKeyDown(NULL))
+		mario->SetState(MARIO_STATE_IDLE);
+
+	else if (game->IsKeyDown(DIK_RIGHT))
 		mario->SetState(MARIO_STATE_WALKING_RIGHT);
+	
 	else if (game->IsKeyDown(DIK_LEFT))
 		mario->SetState(MARIO_STATE_WALKING_LEFT);
+	
+	else if (game->IsKeyDown(DIK_DOWN))
+	{
+		if (mario->GetLevel() != MARIO_LEVEL_SMALL)
+		mario->SetState(MARIO_STATE_SIT);
+	}
+	
 	else
 		mario->SetState(MARIO_STATE_IDLE);
 }
@@ -178,9 +191,9 @@ void LoadResources()
 
 	sprites->Add(10021, 55, 243, 71, 270, texMario);			// jump left
 
-	//sprites->Add(10090, 376, 247, 390, 266, texMario);		// sit right
+	sprites->Add(10090, 375, 247, 390, 266, texMario);			// sit right
 
-	//sprites->Add(10091, 16, 247, 30, 266, texMario);			// sit left
+	sprites->Add(10091, 16, 247, 31, 266, texMario);			// sit left
 
 
 	// Mario small
@@ -216,7 +229,9 @@ void LoadResources()
 
 	sprites->Add(10221, 52, 443, 76, 472, texMario);			// jump left
 
-	//sprites->Add(10290, 0, 0, 0, 0, texMario);			// sit right
+	sprites->Add(10290, 371, 447, 394, 466, texMario);			// sit right
+
+	sprites->Add(10291, 12, 447, 35, 466, texMario);			// sit left
 
 
 
@@ -259,15 +274,43 @@ void LoadResources()
 	sprites->Add(10330, 26, 802, 41, 830, texMario);			// fire left
 	sprites->Add(10331, 6, 802, 21, 830, texMario);
 
+	sprites->Add(10390, 375, 687, 390, 706, texMario);			// sit right
+
+	sprites->Add(10391, 16, 687, 31, 706, texMario);			// sit left
+
+
 
 	LPDIRECT3DTEXTURE9 texMisc = textures->Get(ID_TEX_MISC);
-	sprites->Add(20001, 408, 225, 424, 241, texMisc);
+	sprites->Add(20001, 443, 154, 459, 170, texMisc);		//Floor 1
+	sprites->Add(20002, 460, 154, 476, 170, texMisc);		//Floor 2
+	sprites->Add(20003, 477, 154, 493, 170, texMisc);		//Floor 3
+	sprites->Add(20004, 443, 171, 459, 187, texMisc);		//Floor 4
+	sprites->Add(20005, 460, 171, 476, 187, texMisc);		//Floor 5
+	sprites->Add(20006, 477, 171, 493, 187, texMisc);		//Floor 6
+	sprites->Add(20010, 1004, 18, 1020, 34, texMisc);		//Block đá
+
+	sprites->Add(20101, 69, 35, 85, 51, texMisc);			//Nắp cống trái
+	sprites->Add(20102, 86, 35, 102, 51, texMisc);			//Nắp cống phải
+	sprites->Add(20103, 69, 52, 85, 68, texMisc);			//Thân cống trái
+	sprites->Add(20104, 86, 52, 102, 68, texMisc);			//Thân cống phải
+
+	sprites->Add(21000, 1038, 1, 1054, 17, texMisc);		//Gạch 
+	sprites->Add(21001, 1055, 1, 1071, 17, texMisc);
+	sprites->Add(21002, 1072, 1, 1088, 17, texMisc);
+	sprites->Add(21003, 1089, 1, 1105, 17, texMisc);
+
+	sprites->Add(21010, 1140, 1, 1156, 17, texMisc);		//Khối ?
+	sprites->Add(21011, 1157, 1, 1173, 17, texMisc);
+	sprites->Add(21012, 1174, 1, 1190, 17, texMisc);
+	sprites->Add(21013, 1191, 1, 1207, 17, texMisc);
+
+
 
 	LPDIRECT3DTEXTURE9 texEnemy = textures->Get(ID_TEX_ENEMY);
-	sprites->Add(30001, 5, 14, 21, 29, texEnemy);
-	sprites->Add(30002, 25, 14, 41, 29, texEnemy);
+	sprites->Add(30001, 5, 14, 21, 30, texEnemy);
+	sprites->Add(30002, 25, 14, 41, 30, texEnemy);
 
-	sprites->Add(30003, 45, 21, 61, 29, texEnemy); // die sprite
+	sprites->Add(30003, 45, 21, 61, 30, texEnemy); // die sprite
 
 	LPANIMATION ani;
 	
@@ -300,6 +343,13 @@ void LoadResources()
 	ani->Add(10021);
 	animations->Add(1021, ani);
 
+	ani = new CAnimation(100);	// big sit right
+	ani->Add(10090);
+	animations->Add(1090, ani);
+
+	ani = new CAnimation(100);	// big sit left
+	ani->Add(10091);
+	animations->Add(1091, ani);
 
 
 	// Mario small
@@ -389,7 +439,13 @@ void LoadResources()
 	ani->Add(10225);
 	animations->Add(1223, ani);
 	*/
+	ani = new CAnimation(100);	// tail sit right
+	ani->Add(10290);
+	animations->Add(1290, ani);
 
+	ani = new CAnimation(100);	// tail sit left
+	ani->Add(10291);
+	animations->Add(1291, ani);
 
 	// Mario fire
 
@@ -432,10 +488,76 @@ void LoadResources()
 	ani->Add(10333)
 	animations->Add(1331, ani);
 	*/
+	ani = new CAnimation(100);	// fire sit right
+	ani->Add(10390);
+	animations->Add(1390, ani);
 
-	ani = new CAnimation(100);		// brick
+	ani = new CAnimation(100);	// fire sit left
+	ani->Add(10391);
+	animations->Add(1391, ani);
+
+
+
+
+	ani = new CAnimation(100);		// Floor 1
 	ani->Add(20001);
-	animations->Add(601, ani);
+	animations->Add(20001, ani);
+
+	ani = new CAnimation(100);		// Floor 2
+	ani->Add(20002);
+	animations->Add(20002, ani);
+
+	ani = new CAnimation(100);		// Floor 3
+	ani->Add(20003);
+	animations->Add(20003, ani);
+
+	ani = new CAnimation(100);		// Floor 4
+	ani->Add(20004);
+	animations->Add(20004, ani);
+
+	ani = new CAnimation(100);		// Floor 5
+	ani->Add(20005);
+	animations->Add(20005, ani);
+
+	ani = new CAnimation(100);		// Floor 6
+	ani->Add(20006);
+	animations->Add(20006, ani);
+
+	ani = new CAnimation(100);		// Block đá
+	ani->Add(20010);
+	animations->Add(20010, ani);
+
+	ani = new CAnimation(100);		// Nắp cống trái
+	ani->Add(20101);
+	animations->Add(20101, ani);
+
+	ani = new CAnimation(100);		// Nắp cống phải
+	ani->Add(20102);
+	animations->Add(20102, ani);
+
+	ani = new CAnimation(100);		// Thân cống trái
+	ani->Add(20103);
+	animations->Add(20103, ani);
+
+	ani = new CAnimation(100);		// Thân cống phải
+	ani->Add(20104);
+	animations->Add(20104, ani);
+
+	ani = new CAnimation(100);		// Khối gạch
+	ani->Add(21000);
+	ani->Add(21001);
+	ani->Add(21002);
+	ani->Add(21003);
+	animations->Add(21000, ani);
+
+	ani = new CAnimation(100);		// Khối ?
+	ani->Add(21010);
+	ani->Add(21011);
+	ani->Add(21012);
+	ani->Add(21013);
+	animations->Add(21010, ani);
+
+
 
 	ani = new CAnimation(300);		// Goomba walk
 	ani->Add(30001);
@@ -446,6 +568,7 @@ void LoadResources()
 	ani->Add(30003);
 	animations->Add(702, ani);
 
+
 	mario = new CMario();
 	// Mario big
 	mario->AddAnimation(1000);		// idle right
@@ -454,7 +577,8 @@ void LoadResources()
 	mario->AddAnimation(1011);		// walk left
 	mario->AddAnimation(1020);		// jump right
 	mario->AddAnimation(1021);		// jump left
-
+	mario->AddAnimation(1090);		// sit right
+	mario->AddAnimation(1091);		// sit left
 
 	// Mario small
 	mario->AddAnimation(1100);		// idle right
@@ -481,7 +605,8 @@ void LoadResources()
 	mario->AddAnimation(1222);		// fly right
 	mario->AddAnimation(1223);		// fly left
 	*/
-
+	mario->AddAnimation(1290);		// sit right
+	mario->AddAnimation(1291);		// sit left
 
 	// Mario fire
 	mario->AddAnimation(1300);		// idle right
@@ -490,46 +615,435 @@ void LoadResources()
 	mario->AddAnimation(1311);		// walk left
 	mario->AddAnimation(1320);		// jump right
 	mario->AddAnimation(1321);		// jump left
-	mario->AddAnimation(1230);		// shoot right
-	mario->AddAnimation(1231);		// shoot left
-	
+	/*
+	mario->AddAnimation(1330);		// shoot right
+	mario->AddAnimation(1331);		// shoot left
+	*/
+	mario->AddAnimation(1390);		// sit right
+	mario->AddAnimation(1391);		// sit left
+
 	mario->SetPosition(50.0f, 0);
 	objects.push_back(mario);
 
-	for (int i = 0; i < 5; i++)
+	//vẽ nền
 	{
-		CBrick *brick = new CBrick();
-		brick->AddAnimation(601);
-		brick->SetPosition(100.0f + i*60.0f, 74.0f);
-		objects.push_back(brick);
+		CFloor* floor = new CFloor();
+		floor->AddAnimation(20001);
+		floor->SetPosition(0, 186.0f);
+		objects.push_back(floor); 
+	}
+	for (int fl = 0; fl < 39; fl++)
+	{
+		CFloor *floor = new CFloor();
+		floor->AddAnimation(20002);
+		floor->SetPosition((fl + 1) * 16.0f, 186.0f);
+		objects.push_back(floor);
+	}
+	{
+		CFloor* floor = new CFloor();
+		floor->AddAnimation(20003);
+		floor->SetPosition(640.0f, 186.0f);
+		objects.push_back(floor);
+	}
 
-		brick = new CBrick();
-		brick->AddAnimation(601);
-		brick->SetPosition(100.0f + i*60.0f, 90.0f);
-		objects.push_back(brick);
+	{
+		CFloor* floor = new CFloor();
+		floor->AddAnimation(20001);
+		floor->SetPosition(656.0f, 170.0f);
+		objects.push_back(floor);
 
-		brick = new CBrick();
-		brick->AddAnimation(601);
-		brick->SetPosition(84.0f + i*60.0f, 90.0f);
+		CFloor* floor2 = new CFloor();
+		floor2->AddAnimation(20004);
+		floor2->SetPosition(656.0f, 186.0f);
+		objects.push_back(floor2);
+	}
+	for (int fl = 0; fl < 27; fl++)
+	{
+		CFloor* floor = new CFloor();
+		floor->AddAnimation(20002);
+		floor->SetPosition(fl * 16.0f + 672, 170.0f);
+		objects.push_back(floor);
+
+		CFloor* floor2 = new CFloor();
+		floor2->AddAnimation(20005);
+		floor2->SetPosition(fl * 16.0f + 672, 186.0f);
+		objects.push_back(floor2);
+	}
+	{
+		CFloor* floor = new CFloor();
+		floor->AddAnimation(20003);
+		floor->SetPosition(1104.0f, 170.0f);
+		objects.push_back(floor);
+
+		CFloor* floor2 = new CFloor();
+		floor2->AddAnimation(20006);
+		floor2->SetPosition(1104.0f, 186.0f);
+		objects.push_back(floor2);
+	}
+
+	{
+		CFloor* floor = new CFloor();
+		floor->AddAnimation(20001);
+		floor->SetPosition(1184, 186.0f);
+		objects.push_back(floor);
+	}
+	for (int fl = 0; fl < 20; fl++)
+	{
+		CFloor* floor = new CFloor();
+		floor->AddAnimation(20002);
+		floor->SetPosition(fl * 16.0f + 1200, 186.0f);
+		objects.push_back(floor);
+	}
+	{
+		CFloor* floor = new CFloor();
+		floor->AddAnimation(20003);
+		floor->SetPosition(1520, 186.0f);
+		objects.push_back(floor);
+	}
+
+	{
+		CFloor* floor = new CFloor();
+		floor->AddAnimation(20001);
+		floor->SetPosition(1568, 186.0f);
+		objects.push_back(floor);
+	}
+	for (int fl = 0; fl < 3; fl++)
+	{
+		CFloor* floor = new CFloor();
+		floor->AddAnimation(20002);
+		floor->SetPosition(fl * 16.0f + 1584, 186.0f);
+		objects.push_back(floor);
+	}
+	{
+		CFloor* floor = new CFloor();
+		floor->AddAnimation(20003);
+		floor->SetPosition(1632, 186.0f);
+		objects.push_back(floor);
+	}
+
+	{
+		CFloor* floor = new CFloor();
+		floor->AddAnimation(20001);
+		floor->SetPosition(1696, 186.0f);
+		objects.push_back(floor);
+	}
+	for (int fl = 0; fl < 34; fl++)
+	{
+		CFloor* floor = new CFloor();
+		floor->AddAnimation(20002);
+		floor->SetPosition(fl * 16.0f + 1712, 186.0f);
+		objects.push_back(floor);
+	}
+	{
+		CFloor* floor = new CFloor();
+		floor->AddAnimation(20003);
+		floor->SetPosition(2256, 186.0f);
+		objects.push_back(floor);
+	}
+
+	{
+		CFloor* floor = new CFloor();
+		floor->AddAnimation(20001);
+		floor->SetPosition(2288, 186.0f);
+		objects.push_back(floor);
+	}
+	for (int fl = 0; fl < 33; fl++)
+	{
+		CFloor* floor = new CFloor();
+		floor->AddAnimation(20002);
+		floor->SetPosition(fl * 16.0f + 2304, 186.0f);
+		objects.push_back(floor);
+	}
+	{
+		CFloor* floor = new CFloor();
+		floor->AddAnimation(20003);
+		floor->SetPosition(2832, 186.0f);
+		objects.push_back(floor);
+	}
+
+
+	//vẽ ống cống
+	for (int pi = 0; pi < 2; pi++)
+	{
+		CFloor* floor = new CFloor();
+		floor->AddAnimation(20103);
+		floor->SetPosition(352, 170.0f - pi * 16);
+		objects.push_back(floor);
+	}
+	for (int pi = 0; pi < 2; pi++)
+	{
+		CFloor* floor = new CFloor();
+		floor->AddAnimation(20104);
+		floor->SetPosition(368, 170.0f - pi * 16);
+		objects.push_back(floor);
+	}
+	{
+		CFloor* floor = new CFloor();
+		floor->AddAnimation(20101);
+		floor->SetPosition(352, 138.0f);
+		objects.push_back(floor);
+	}
+	{
+		CFloor* floor = new CFloor();
+		floor->AddAnimation(20102);
+		floor->SetPosition(368, 138.0f);
+		objects.push_back(floor);
+	}
+
+	{
+		CFloor* floor = new CFloor();
+		floor->AddAnimation(20103);
+		floor->SetPosition(1824, 170.0f);
+		objects.push_back(floor);
+	}
+	{
+		CFloor* floor = new CFloor();
+		floor->AddAnimation(20104);
+		floor->SetPosition(1840, 170.0f);
+		objects.push_back(floor);
+	}
+	{
+		CFloor* floor = new CFloor();
+		floor->AddAnimation(20101);
+		floor->SetPosition(1824, 154.0f);
+		objects.push_back(floor);
+	}
+	{
+		CFloor* floor = new CFloor();
+		floor->AddAnimation(20102);
+		floor->SetPosition(1840, 154.0f);
+		objects.push_back(floor);
+	}
+
+	for (int pi = 0; pi < 2; pi++)
+	{
+		CFloor* floor = new CFloor();
+		floor->AddAnimation(20103);
+		floor->SetPosition(1888, 170.0f - pi * 16);
+		objects.push_back(floor);
+	}
+	for (int pi = 0; pi < 2; pi++)
+	{
+		CFloor* floor = new CFloor();
+		floor->AddAnimation(20104);
+		floor->SetPosition(1904, 170.0f - pi * 16);
+		objects.push_back(floor);
+	}
+	{
+		CFloor* floor = new CFloor();
+		floor->AddAnimation(20101);
+		floor->SetPosition(1888, 138.0f);
+		objects.push_back(floor);
+	}
+	{
+		CFloor* floor = new CFloor();
+		floor->AddAnimation(20102);
+		floor->SetPosition(1904, 138.0f);
+		objects.push_back(floor);
+	}
+
+	//cống dưới
+	for (int pi = 0; pi < 2; pi++)
+	{
+		CFloor* floor = new CFloor();
+		floor->AddAnimation(20103);
+		floor->SetPosition(2288, 170.0f - pi * 16);
+		objects.push_back(floor);
+	}
+	for (int pi = 0; pi < 2; pi++)
+	{
+		CFloor* floor = new CFloor();
+		floor->AddAnimation(20104);
+		floor->SetPosition(2304, 170.0f - pi * 16);
+		objects.push_back(floor);
+	}
+	//cống trên
+	{
+		CFloor* floor = new CFloor();
+		floor->AddAnimation(20101);
+		floor->SetPosition(2288, -118.0f);
+		objects.push_back(floor); 
+	}
+	{
+		CFloor* floor = new CFloor();
+		floor->AddAnimation(20102);
+		floor->SetPosition(2304, -118.0f);
+		objects.push_back(floor);
+	}
+	for (int pi = 0; pi < 11; pi++)
+	{
+		CFloor* floor = new CFloor();
+		floor->AddAnimation(20103);
+		floor->SetPosition(2288, 58.0f - pi * 16);
+		objects.push_back(floor);
+	}
+	for (int pi = 0; pi < 11; pi++)
+	{
+		CFloor* floor = new CFloor();
+		floor->AddAnimation(20104);
+		floor->SetPosition(2304, 58.0f - pi * 16);
+		objects.push_back(floor);
+	}
+
+
+
+	//vẽ block đá
+	for (int fl = 0; fl < 2; fl++)
+	{
+		CFloor* floor = new CFloor();
+		floor->AddAnimation(20010);
+		floor->SetPosition(fl * 16.0f + 1536, 106.0f);
+		objects.push_back(floor);
+	}
+
+	for (int fl = 0; fl < 3; fl++)
+	{
+		CFloor* floor = new CFloor();
+		floor->AddAnimation(20010);
+		floor->SetPosition(fl * 16.0f + 1600, 170.0f);
+		objects.push_back(floor);
+	}
+	for (int fl = 0; fl < 2; fl++)
+	{
+		CFloor* floor = new CFloor();
+		floor->AddAnimation(20010);
+		floor->SetPosition(fl * 16.0f + 1616, 154.0f);
+		objects.push_back(floor);
+	}
+	{
+		CFloor* floor = new CFloor();
+		floor->AddAnimation(20010);
+		floor->SetPosition(1632, 138.0f);
+		objects.push_back(floor);
+	}
+
+	for (int fl = 0; fl < 3; fl++)
+	{
+		CFloor* floor = new CFloor();
+		floor->AddAnimation(20010);
+		floor->SetPosition(fl * 16.0f + 1696, 170.0f);
+		objects.push_back(floor);
+	}
+	for (int fl = 0; fl < 2; fl++)
+	{
+		CFloor* floor = new CFloor();
+		floor->AddAnimation(20010);
+		floor->SetPosition(fl * 16.0f + 1696, 154.0f);
+		objects.push_back(floor);
+	}
+	{
+		CFloor* floor = new CFloor();
+		floor->AddAnimation(20010);
+		floor->SetPosition(1696, 138.0f);
+		objects.push_back(floor);
+	}
+
+	for (int fl = 0; fl < 2; fl++)
+	{
+		CFloor* floor = new CFloor();
+		floor->AddAnimation(20010);
+		floor->SetPosition(fl * 16.0f + 2288, 138.0f);
+		objects.push_back(floor);
+	}
+	for (int fl = 0; fl < 2; fl++)
+	{
+		CFloor* floor = new CFloor();
+		floor->AddAnimation(20010);
+		floor->SetPosition(fl * 16.0f + 2288, 74.0f);
+		objects.push_back(floor);
+	}
+
+
+	//vẽ block gạch
+	for (int br = 0; br < 7; br++)
+	{
+		CBrick* brick = new CBrick();
+		brick->AddAnimation(21000);
+		brick->SetPosition(br * 16.0f + 1984, 170.0f);
+		objects.push_back(brick);
+	}
+	for (int br = 0; br < 5; br++)
+	{
+		CBrick* brick = new CBrick();
+		brick->AddAnimation(21000);
+		brick->SetPosition(br * 16.0f + 2000, 154.0f);
+		objects.push_back(brick);
+	}
+	for (int br = 0; br < 4; br++)
+	{
+		CBrick* brick = new CBrick();
+		brick->AddAnimation(21000);
+		brick->SetPosition(br * 16.0f + 2016, 138.0f);
+		objects.push_back(brick);
+	}
+
+	for (int br = 0; br < 2; br++)
+	{
+		CBrick* brick = new CBrick();
+		brick->AddAnimation(21000);
+		brick->SetPosition(br * 16.0f + 2128, 170.0f);
+		objects.push_back(brick);
+	}
+	{
+		CBrick* brick = new CBrick();
+		brick->AddAnimation(21000);
+		brick->SetPosition(2128.0f, 154.0f);
 		objects.push_back(brick);
 	}
 
 
-	for (int i = 0; i < 30; i++)
+	//vẽ block ?
+	for (int se = 0; se < 2; se++)
 	{
-		CBrick *brick = new CBrick();
-		brick->AddAnimation(601);
-		brick->SetPosition(0 + i*16.0f, 150);
+		CBrick* brick = new CBrick();
+		brick->AddAnimation(21010);
+		brick->SetPosition(se * 16.0f + 192, 122.0f);
+		objects.push_back(brick);
+	}
+	
+	for (int se = 0; se < 2; se++)
+	{
+		CBrick* brick = new CBrick();
+		brick->AddAnimation(21010);
+		brick->SetPosition(se * 16.0f + 240, 90.0f);
 		objects.push_back(brick);
 	}
 
-	// and Goombas 
-	for (int i = 0; i < 4; i++)
+	{
+		CBrick* brick = new CBrick();
+		brick->AddAnimation(21010);
+		brick->SetPosition(432, 74.0f);
+		objects.push_back(brick);
+	}
+
+	{
+		CBrick* brick = new CBrick();
+		brick->AddAnimation(21010);
+		brick->SetPosition(688.0f, 154.0f);
+		objects.push_back(brick);
+	}
+
+	{
+		CBrick* brick = new CBrick();
+		brick->AddAnimation(21010);
+		brick->SetPosition(736.0f, 122.0f);
+		objects.push_back(brick);
+	}
+
+	{
+		CBrick* brick = new CBrick();
+		brick->AddAnimation(21010);
+		brick->SetPosition(1504.0f, 138.0f);
+		objects.push_back(brick);
+	}
+
+	// Goombas 
+	for (int Goombas = 0; Goombas < 4; Goombas++)
 	{
 		goomba = new CGoomba();
 		goomba->AddAnimation(701);
 		goomba->AddAnimation(702);
-		goomba->SetPosition(200 + i*60, 135);
+		goomba->SetPosition(200 + Goombas *60, 170);
 		goomba->SetState(GOOMBA_STATE_WALKING);
 		objects.push_back(goomba);
 	}
@@ -540,6 +1054,7 @@ void LoadResources()
 	Update world status for this frame
 	dt: time period between beginning of last frame and beginning of this frame
 */
+
 void Update(DWORD dt)
 {
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
@@ -561,10 +1076,22 @@ void Update(DWORD dt)
 	float cx, cy;
 	mario->GetPosition(cx, cy);
 
-	cx -= SCREEN_WIDTH / 2;
-	cy -= SCREEN_HEIGHT / 2;
+	cx -= SCREEN_WIDTH / 2 - 15.0f;
+	cy -= SCREEN_HEIGHT / 2 - 100.0f;
 
-	CGame::GetInstance()->SetCamPos(cx, 0.0f /*cy*/);
+	if (cx < 0)
+		CGame::GetInstance()->SetCamPos(0, 0);
+	else if (cx > 0 && cx < 2543.0f)
+	{
+		if (cy >= 0)
+			CGame::GetInstance()->SetCamPos(cx, 0);
+		else 
+			CGame::GetInstance()->SetCamPos(cx, cy);
+	}
+	else if (cx > 2543.0f)
+		CGame::GetInstance()->SetCamPos(2543, 0);
+
+
 }
 
 /*

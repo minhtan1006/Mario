@@ -1,6 +1,6 @@
 ﻿  main.cpp
-F:\Tài liệu học tập\5\Phát triển game\Mario-d4b214443595b564fd64442e6f56044a7dfd5ed0\Mario\main.cpp(532,27): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-F:\Tài liệu học tập\5\Phát triển game\Mario-d4b214443595b564fd64442e6f56044a7dfd5ed0\Mario\main.cpp(549,20): warning C4018: '<': signed/unsigned mismatch
-F:\Tài liệu học tập\5\Phát triển game\Mario-d4b214443595b564fd64442e6f56044a7dfd5ed0\Mario\main.cpp(554,20): warning C4018: '<': signed/unsigned mismatch
-F:\Tài liệu học tập\5\Phát triển game\Mario-d4b214443595b564fd64442e6f56044a7dfd5ed0\Mario\main.cpp(586,21): warning C4018: '<': signed/unsigned mismatch
-  04-Collision.vcxproj -> F:\Tài liệu học tập\5\Phát triển game\Mario-d4b214443595b564fd64442e6f56044a7dfd5ed0\Mario\Debug\04-Collision.exe
+F:\Tài liệu học tập\5\Phát triển game\Mario\main.cpp(1046,27): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+F:\Tài liệu học tập\5\Phát triển game\Mario\main.cpp(1064,20): warning C4018: '<': signed/unsigned mismatch
+F:\Tài liệu học tập\5\Phát triển game\Mario\main.cpp(1069,20): warning C4018: '<': signed/unsigned mismatch
+F:\Tài liệu học tập\5\Phát triển game\Mario\main.cpp(1113,21): warning C4018: '<': signed/unsigned mismatch
+  04-Collision.vcxproj -> F:\Tài liệu học tập\5\Phát triển game\Mario\Debug\04-Collision.exe

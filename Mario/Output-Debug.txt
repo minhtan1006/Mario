@@ -1,0 +1,148 @@
+﻿'04-Collision.exe' (Win32): Loaded 'F:\Tài liệu học tập\5\Phát triển game\Mario\Debug\04-Collision.exe'. Symbols loaded.
+'04-Collision.exe' (Win32): Loaded 'C:\Windows\System32\ntdll.dll'. 
+'04-Collision.exe' (Win32): Loaded 'C:\Windows\System32\kernel32.dll'. 
+'04-Collision.exe' (Win32): Loaded 'C:\Windows\System32\KernelBase.dll'. 
+'04-Collision.exe' (Win32): Loaded 'C:\Windows\System32\D3DX9_43.dll'. 
+'04-Collision.exe' (Win32): Loaded 'C:\Windows\System32\d3d9.dll'. 
+'04-Collision.exe' (Win32): Loaded 'C:\Windows\System32\dinput8.dll'. 
+'04-Collision.exe' (Win32): Loaded 'C:\Windows\System32\user32.dll'. 
+'04-Collision.exe' (Win32): Loaded 'C:\Windows\System32\gdi32.dll'. 
+'04-Collision.exe' (Win32): Loaded 'C:\Windows\System32\msvcp140d.dll'. 
+'04-Collision.exe' (Win32): Loaded 'C:\Windows\System32\vcruntime140d.dll'. 
+'04-Collision.exe' (Win32): Loaded 'C:\Windows\System32\ucrtbased.dll'. 
+'04-Collision.exe' (Win32): Loaded 'C:\Windows\System32\msvcrt.dll'. 
+'04-Collision.exe' (Win32): Loaded 'C:\Windows\System32\advapi32.dll'. 
+'04-Collision.exe' (Win32): Loaded 'C:\Windows\System32\sechost.dll'. 
+'04-Collision.exe' (Win32): Loaded 'C:\Windows\System32\version.dll'. 
+'04-Collision.exe' (Win32): Loaded 'C:\Windows\System32\dwmapi.dll'. 
+'04-Collision.exe' (Win32): Loaded 'C:\Windows\System32\rpcrt4.dll'. 
+'04-Collision.exe' (Win32): Loaded 'C:\Windows\System32\combase.dll'. 
+'04-Collision.exe' (Win32): Loaded 'C:\Windows\System32\imm32.dll'. 
+'04-Collision.exe' (Win32): Loaded 'C:\Windows\System32\msctf.dll'. 
+'04-Collision.exe' (Win32): Loaded 'C:\Windows\System32\uxtheme.dll'. 
+'04-Collision.exe' (Win32): Loaded 'C:\Windows\System32\ole32.dll'. 
+'04-Collision.exe' (Win32): Loaded 'C:\Windows\System32\kernel.appcore.dll'. 
+'04-Collision.exe' (Win32): Loaded 'C:\Windows\System32\cryptbase.dll'. 
+'04-Collision.exe' (Win32): Loaded 'C:\Windows\System32\bcryptprimitives.dll'. 
+'04-Collision.exe' (Win32): Loaded 'C:\Windows\System32\igdumdx32.dll'. 
+'04-Collision.exe' (Win32): Loaded 'C:\Windows\System32\igdumd32.dll'. 
+'04-Collision.exe' (Win32): Loaded 'C:\Windows\System32\powrprof.dll'. 
+[INFO] InitGame done;
+[INFO] Keyboard has been initialized successfully
+[INFO] Texture loaded Ok: id=0, textures\mario.png 
+[INFO] Texture loaded Ok: id=20, textures\misc.png 
+[INFO] Texture loaded Ok: id=10, textures\enemies.png 
+[INFO] Texture loaded Ok: id=-100, textures\bbox.png 
+'04-Collision.exe' (Win32): Loaded 'C:\Windows\System32\hid.dll'. 
+'04-Collision.exe' (Win32): Loaded 'C:\Windows\System32\setupapi.dll'. 
+'04-Collision.exe' (Win32): Loaded 'C:\Windows\System32\cfgmgr32.dll'. 
+'04-Collision.exe' (Win32): Loaded 'C:\Windows\System32\winmm.dll'. 
+'04-Collision.exe' (Win32): Loaded 'C:\Windows\System32\winmmbase.dll'. 
+'04-Collision.exe' (Win32): Loaded 'C:\Windows\System32\devobj.dll'. 
+'04-Collision.exe' (Win32): Loaded 'C:\Windows\System32\wintrust.dll'. 
+'04-Collision.exe' (Win32): Loaded 'C:\Windows\System32\crypt32.dll'. 
+'04-Collision.exe' (Win32): Loaded 'C:\Windows\System32\msasn1.dll'. 
+[INFO] KeyDown: 205
+[INFO] KeyDown: 45
+[INFO] KeyUp: 45
+[INFO] KeyUp: 205
+[INFO] KeyDown: 45
+[INFO] KeyUp: 45
+[INFO] KeyDown: 45
+[INFO] KeyUp: 45
+[INFO] KeyDown: 203
+[INFO] KeyUp: 203
+[INFO] KeyDown: 45
+[INFO] KeyUp: 45
+[INFO] KeyDown: 205
+[INFO] KeyUp: 205
+[INFO] KeyDown: 45
+[INFO] KeyUp: 45
+[INFO] KeyDown: 203
+[INFO] KeyUp: 203
+[INFO] KeyDown: 205
+[INFO] KeyUp: 205
+[INFO] KeyDown: 205
+[INFO] KeyDown: 45
+[INFO] KeyUp: 45
+[INFO] KeyUp: 205
+[INFO] KeyDown: 203
+[INFO] KeyDown: 45
+[INFO] KeyUp: 45
+[INFO] KeyDown: 45
+[INFO] KeyUp: 45
+[INFO] KeyUp: 203
+[INFO] KeyDown: 45
+[INFO] KeyUp: 45
+[INFO] KeyDown: 203
+[INFO] KeyUp: 203
+[INFO] KeyDown: 45
+[INFO] KeyDown: 205
+[INFO] KeyUp: 45
+[INFO] KeyUp: 205
+[INFO] KeyDown: 203
+[INFO] KeyDown: 45
+[INFO] KeyUp: 45
+[INFO] KeyUp: 203
+[INFO] KeyDown: 203
+[INFO] KeyDown: 205
+[INFO] KeyUp: 203
+[INFO] KeyDown: 45
+[INFO] KeyUp: 45
+[INFO] KeyDown: 203
+[INFO] KeyDown: 45
+[INFO] KeyUp: 205
+[INFO] KeyDown: 205
+[INFO] KeyUp: 203
+[INFO] KeyUp: 45
+[INFO] KeyDown: 45
+[INFO] KeyUp: 45
+[INFO] KeyDown: 45
+[INFO] KeyUp: 45
+[INFO] KeyDown: 45
+[INFO] KeyUp: 45
+[INFO] KeyDown: 45
+[INFO] KeyUp: 45
+[INFO] KeyDown: 45
+[INFO] KeyUp: 45
+[INFO] KeyDown: 45
+[INFO] KeyUp: 45
+[INFO] KeyDown: 45
+[INFO] KeyUp: 45
+[INFO] KeyDown: 45
+[INFO] KeyUp: 45
+[INFO] KeyDown: 45
+[INFO] KeyUp: 45
+[INFO] KeyUp: 205
+[INFO] KeyDown: 205
+[INFO] KeyDown: 45
+[INFO] KeyUp: 45
+[INFO] KeyUp: 205
+[INFO] KeyDown: 45
+[INFO] KeyDown: 205
+[INFO] KeyUp: 45
+[INFO] KeyUp: 205
+[INFO] KeyDown: 205
+[INFO] KeyDown: 45
+[INFO] KeyUp: 45
+[INFO] KeyDown: 45
+[INFO] KeyUp: 45
+[INFO] KeyDown: 45
+[INFO] KeyUp: 45
+[INFO] KeyDown: 45
+[INFO] KeyUp: 45
+[INFO] KeyDown: 45
+[INFO] KeyUp: 45
+[INFO] KeyDown: 45
+[INFO] KeyUp: 45
+[INFO] KeyDown: 45
+[INFO] KeyUp: 45
+[INFO] KeyDown: 45
+[INFO] KeyUp: 45
+[INFO] KeyUp: 205
+The thread 0x1f14 has exited with code 0 (0x0).
+The thread 0xb4c has exited with code 0 (0x0).
+The thread 0x1e10 has exited with code 0 (0x0).
+The thread 0x180c has exited with code 0 (0x0).
+The thread 0xcec has exited with code 0 (0x0).
+The program '[7860] 04-Collision.exe' has exited with code 0 (0x0).
